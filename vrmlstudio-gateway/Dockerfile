@@ -1,0 +1,16 @@
+# 基础镜像
+FROM  openjdk:8-jre
+# author
+MAINTAINER vrmlstudio
+
+# 挂载目录
+VOLUME /home/vrmlstudio
+# 创建目录
+RUN mkdir -p /home/vrmlstudio
+# 指定路径
+WORKDIR /home/vrmlstudio
+# 复制jar文件到路径
+COPY ./target/vrmlstudio-gateway.jar /home/vrmlstudio/vrmlstudio-gateway.jar
+
+# 启动网关服务
+ENTRYPOINT ["java","-jar","vrmlstudio-gateway.jar"]

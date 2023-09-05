@@ -1,0 +1,3 @@
+com.vrmlstudio.common.datasource.config.properties.SourceProperties
+com.vrmlstudio.common.datasource.config.MyDynamicDataSourceConfig
+com.vrmlstudio.common.datasource.provider.DynamicDataSourceLoading

@@ -1,0 +1,282 @@
+package ${packageName}.controller;
+
+#if($table.base)
+#set($Entity="Base")
+#set($generics = "<"+${ClassName}+"Dto, I"+${ClassName}+"Service>")
+#elseif($table.tree)
+#set($Entity="Tree")
+#set($generics = "<"+${ClassName}+"Dto, I"+${ClassName}+"Service>")
+#elseif($table.subBase)
+#set($Entity="SubBase")
+#set($generics = "<"+${ClassName}+"Dto, I"+${ClassName}+"Service, "+${subClassName}+"Dto, I"+${subClassName}+"Service>")
+#elseif($table.subTree)
+#set($Entity="SubTree")
+#set($generics = "<"+${ClassName}+"Dto, I"+${ClassName}+"Service, "+${subClassName}+"Dto, I"+${subClassName}+"Service>")
+#end
+import ${packageName}.domain.dto.${ClassName}Dto;
+import ${packageName}.service.I${ClassName}Service;
+#if($table.subBase || $table.subTree)
+import ${subPackageName}.domain.dto.${subClassName}Dto;
+import ${subPackageName}.service.I${subClassName}Service;
+#end
+import com.vrmlstudio.common.web.entity.controller.${Entity}Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+#if($api.editStatus || $api.editStatusForce)
+import com.vrmlstudio.common.security.annotation.Logical;
+#end
+import com.vrmlstudio.common.security.annotation.RequiresPermissions;
+import com.vrmlstudio.common.core.web.validate.V_A;
+import com.vrmlstudio.common.core.web.validate.V_E;
+import com.vrmlstudio.common.core.web.result.AjaxResult;
+import com.vrmlstudio.common.log.annotation.Log;
+import com.vrmlstudio.common.log.enums.BusinessType;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+#if($api.export)
+import javax.servlet.http.HttpServletResponse;
+#end
+#if($api.getInfo)
+import java.io.Serializable;
+#end
+#if($api.batchRemove || $api.batchRemoveForce)
+import java.util.List;
+#end
+
+/**
+ * ${functionName}管理 业务处理
+ *
+ * @author ${author}
+ */
+@RestController
+@RequestMapping("/${businessName}")
+public class ${ClassName}Controller extends ${Entity}Controller${generics} {
+
+    /** 定义节点名称 */
+    @Override
+    protected String getNodeName() {
+        return "${functionName}";
+    }
+#if($table.subBase || $table.subTree)
+
+    /** 定义子数据名称 */
+    @Override
+    protected String getSubName() {
+        return "${subFunctionName}";
+    }
+#end
+#if($api.list)
+
+    /**
+     * 查询${functionName}列表
+     */
+    @Override
+    @GetMapping("/list")
+    @RequiresPermissions(Auth.${ClASS_NAME}_LIST)
+    public AjaxResult list(${ClassName}Dto ${classNameNoPrefix}) {
+        return super.list(${classNameNoPrefix});
+    }
+#if($table.tree || $table.subTree)
+
+    /**
+     * 查询${functionName}列表（排除节点）
+     */
+    @GetMapping("/list/exclude")
+    @RequiresPermissions(Auth.${ClASS_NAME}_LIST)
+    public AjaxResult listExNodes(${ClassName}Dto ${classNameNoPrefix}) {
+        return super.listExNodes(${classNameNoPrefix});
+    }
+#end
+#end
+#if($api.getInfo)
+
+    /**
+     * 查询${functionName}详细
+     */
+    @Override
+    @GetMapping(value = "/{id}")
+    @RequiresPermissions(Auth.${ClASS_NAME}_SINGLE)
+    public AjaxResult getInfoExtra(@PathVariable Serializable id) {
+        return super.getInfoExtra(id);
+    }
+#end
+#if($api.export)
+
+    /**
+     * ${functionName}导出
+     */
+    @Override
+    @PostMapping("/export")
+    @RequiresPermissions(Auth.${ClASS_NAME}_EXPORT)
+    @Log(title = "${functionName}管理", businessType = BusinessType.EXPORT)
+    public void export(HttpServletResponse response, ${ClassName}Dto ${classNameNoPrefix}) {
+        super.export(response, ${classNameNoPrefix});
+    }
+#end
+#if($api.add)
+
+    /**
+     * ${functionName}新增
+     */
+    @Override
+    @PostMapping
+    @RequiresPermissions(Auth.${ClASS_NAME}_ADD)
+    @Log(title = "${functionName}管理", businessType = BusinessType.INSERT)
+    public AjaxResult add(@Validated({V_A.class}) @RequestBody ${ClassName}Dto ${classNameNoPrefix}) {
+        return super.add(${classNameNoPrefix});
+    }
+#end
+#if($api.addForce)
+
+    /**
+     * ${functionName}强制新增
+     */
+    @Override
+    @PostMapping("/force")
+    @RequiresPermissions(Auth.${ClASS_NAME}_ADDFORCE)
+    @Log(title = "${functionName}管理", businessType = BusinessType.INSERT_FORCE)
+    public AjaxResult addForce(@Validated({V_A.class}) @RequestBody ${ClassName}Dto ${classNameNoPrefix}) {
+        return super.addForce(${classNameNoPrefix});
+    }
+#end
+#if($api.edit)
+
+    /**
+     * ${functionName}修改
+     */
+    @Override
+    @PutMapping
+    @RequiresPermissions(Auth.${ClASS_NAME}_EDIT)
+    @Log(title = "${functionName}管理", businessType = BusinessType.UPDATE)
+    public AjaxResult edit(@Validated({V_E.class}) @RequestBody ${ClassName}Dto ${classNameNoPrefix}) {
+        return super.edit(${classNameNoPrefix});
+    }
+#end
+#if($api.editForce)
+
+    /**
+     * ${functionName}强制修改
+     */
+    @Override
+    @PutMapping("/force")
+    @RequiresPermissions(Auth.${ClASS_NAME}_EDIT_FORCE)
+    @Log(title = "${functionName}管理", businessType = BusinessType.UPDATE_FORCE)
+    public AjaxResult editForce(@Validated({V_E.class}) @RequestBody ${ClassName}Dto ${classNameNoPrefix}) {
+        return super.editForce(${classNameNoPrefix});
+    }
+#end
+#if($api.editStatus)
+
+    /**
+     * ${functionName}修改状态
+     */
+    @Override
+    @PutMapping("/status")
+    @RequiresPermissions(value = {Auth.${ClASS_NAME}_EDIT, Auth.${ClASS_NAME}_ES}, logical = Logical.OR)
+    @Log(title = "${functionName}管理", businessType = BusinessType.UPDATE_STATUS)
+    public AjaxResult editStatus(@RequestBody ${ClassName}Dto ${classNameNoPrefix}) {
+        return super.editStatus(${classNameNoPrefix});
+    }
+#end
+#if($api.editStatusForce)
+
+    /**
+     * ${functionName}强制修改状态
+     */
+    @Override
+    @PutMapping("/force/status")
+    @RequiresPermissions(value = {Auth.${ClASS_NAME}_EDIT_FORCE, Auth.${ClASS_NAME}_ES_FORCE}, logical = Logical.OR)
+    @Log(title = "${functionName}管理", businessType = BusinessType.UPDATE_STATUS_FORCE)
+    public AjaxResult editStatusForce(@RequestBody ${ClassName}Dto ${classNameNoPrefix}) {
+        return super.editStatusForce(${classNameNoPrefix});
+    }
+#end
+#if($api.batchRemove)
+
+    /**
+     * ${functionName}批量删除
+     */
+    @Override
+    @DeleteMapping("/batch/{idList}")
+    @RequiresPermissions(Auth.${ClASS_NAME}_DEL)
+    @Log(title = "${functionName}管理", businessType = BusinessType.DELETE)
+    public AjaxResult batchRemove(@PathVariable List<Long> idList) {
+        return super.batchRemove(idList);
+    }
+#end
+#if($api.batchRemoveForce)
+
+    /**
+     * ${functionName}强制批量删除
+     */
+    @Override
+    @DeleteMapping("/batch/force/{idList}")
+    @RequiresPermissions(Auth.${ClASS_NAME}_DEL_FORCE)
+    @Log(title = "${functionName}管理", businessType = BusinessType.DELETE_FORCE)
+    public AjaxResult batchRemoveForce(@PathVariable List<Long> idList) {
+        return super.batchRemoveForce(idList);
+    }
+#end
+#if($api.list)
+
+    /**
+     * 获取${functionName}选择框列表
+     */
+    @Override
+    @GetMapping("/option")
+    public AjaxResult option() {
+        return super.option();
+    }
+#end
+
+    interface Auth {
+#if($api.list)
+        /** 系统 - ${functionName}管理 - 列表 */
+        String ${ClASS_NAME}_LIST = "${authorityName}:${businessName}:list";
+#end
+#if($api.getInfo)
+        /** 系统 - ${functionName}管理 - 详情 */
+        String ${ClASS_NAME}_SINGLE = "${authorityName}:${businessName}:single";
+#end
+#if($api.add)
+        /** 系统 - ${functionName}管理 - 新增 */
+        String ${ClASS_NAME}_ADD = "${authorityName}:${businessName}:add";
+#end
+#if($api.addForce)
+        /** 系统 - ${functionName}管理 - 强制新增 */
+        String ${ClASS_NAME}_ADD_FORCE = "${authorityName}:${businessName}:addForce";
+#end
+#if($api.edit)
+        /** 系统 - ${functionName}管理 - 修改 */
+        String ${ClASS_NAME}_EDIT = "${authorityName}:${businessName}:edit";
+#end
+#if($api.editForce)
+        /** 系统 - ${functionName}管理 - 强制修改 */
+        String ${ClASS_NAME}_EDIT_FORCE = "${authorityName}:${businessName}:editForce";
+#end
+#if($api.editStatus)
+        /** 系统 - ${functionName}管理 - 修改状态 */
+        String ${ClASS_NAME}_ES = "${authorityName}:${businessName}:es";
+#end
+#if($api.editStatusForce)
+        /** 系统 - ${functionName}管理 - 强制修改状态 */
+        String ${ClASS_NAME}_ES_FORCE = "${authorityName}:${businessName}:esForce";
+#end
+#if($api.batchRemove)
+        /** 系统 - ${functionName}管理 - 删除 */
+        String ${ClASS_NAME}_DEL = "${authorityName}:${businessName}:delete";
+#end
+#if($api.batchRemoveForce)
+        /** 系统 - ${functionName}管理 - 强制删除 */
+        String ${ClASS_NAME}_DEL_FORCE = "${authorityName}:${businessName}:delForce";
+#end
+#if($api.import)
+        /** 系统 - ${functionName}管理 - 导入 */
+        String ${ClASS_NAME}_IMPORT = "${authorityName}:${businessName}:import";
+#end
+#if($api.export)
+        /** 系统 - ${functionName}管理 - 导出 */
+        String ${ClASS_NAME}_EXPORT = "${authorityName}:${businessName}:export";
+#end
+    }
+}

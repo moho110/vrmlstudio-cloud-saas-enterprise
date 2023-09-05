@@ -1,0 +1,14 @@
+package ${packageName}.mapper.merge;
+
+import com.vrmlstudio.common.web.entity.mapper.BaseMapper;
+import ${packageName}.domain.merge.${ClassName};
+    ${sourceMode};
+
+/**
+ * ${functionName} 数据层
+ *
+ * @author ${author}
+ */
+@${sourceMode}
+public interface ${ClassName}Mapper extends BaseMapper<${ClassName}> {
+}

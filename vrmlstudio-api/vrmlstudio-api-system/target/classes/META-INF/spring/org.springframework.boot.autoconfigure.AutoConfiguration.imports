@@ -1,0 +1,9 @@
+com.vrmlstudio.system.api.organize.feign.factory.RemoteDeptFallbackFactory
+com.vrmlstudio.system.api.organize.feign.factory.RemotePostFallbackFactory
+com.vrmlstudio.system.api.organize.feign.factory.RemoteUserFallbackFactory
+com.vrmlstudio.system.api.authority.feign.factory.RemoteLoginFallbackFactory
+com.vrmlstudio.system.api.authority.feign.factory.RemoteMenuFallbackFactory
+com.vrmlstudio.system.api.authority.feign.factory.RemoteAuthFallbackFactory
+com.vrmlstudio.system.api.dict.feign.factory.RemoteConfigFallbackFactory
+com.vrmlstudio.system.api.log.feign.factory.RemoteLogFallbackFactory
+com.vrmlstudio.system.api.source.feign.factory.RemoteSourceFallbackFactory

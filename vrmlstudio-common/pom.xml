@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.vrmlstudio</groupId>
+        <artifactId>vrmlstudio</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>vrmlstudio-common-log</module>
+        <module>vrmlstudio-common-web</module>
+        <module>vrmlstudio-common-core</module>
+        <module>vrmlstudio-common-redis</module>
+        <module>vrmlstudio-common-swagger</module>
+        <module>vrmlstudio-common-security</module>
+        <module>vrmlstudio-common-datascope</module>
+        <module>vrmlstudio-common-datasource</module>
+    </modules>
+
+    <artifactId>vrmlstudio-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        vrmlstudio-common通用模块
+    </description>
+
+</project>

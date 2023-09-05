@@ -1,0 +1,4 @@
+com.vrmlstudio.common.web.config.properties.TenantProperties
+com.vrmlstudio.common.web.config.VrmlStudioMyBatisPlusConfig
+com.vrmlstudio.common.web.handler.VrmlStudioMetaObjectHandler
+com.vrmlstudio.common.web.handler.TenantLineHandler

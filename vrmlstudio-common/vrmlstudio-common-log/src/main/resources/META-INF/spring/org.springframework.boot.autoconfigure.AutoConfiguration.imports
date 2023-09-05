@@ -1,0 +1,2 @@
+com.vrmlstudio.common.log.service.AsyncLogService
+com.vrmlstudio.common.log.aspect.LogAspect
